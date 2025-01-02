@@ -1,6 +1,6 @@
 baseURL = "https://github.com/sohanrai09/blog/"
 languageCode = "en-us"
-title = "Sohan”’s blog
+title = "Sohan’s blog"
 theme = "hugo-book"
 
 [params]
