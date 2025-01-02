@@ -351,11 +351,11 @@ Moving to Test Case `TC - Post checks after the configuration change`, where the
 ![log3](/images/log3_3.png)
 We can see that failure is seen in `Ospf Neighbor Count` keyword, we can see `Ospf Nbr Count` returning 0, which means there are no OSPF neighbors on the device in Full State. Due to this our verification fails as our expected value is 3 but the extracted value is 0! Checking on the device, we can see why.
 
-![router](/images/router.png)
+![router](https://github.com/sohanrai09/blog/blob/main/static/images/router.png?raw=true)
 
 We see all our OSPF neighbors in `Exstart` state! Looking closely at the configuration changes made.
 
-![config](/images/config.png)
+![config](https://github.com/sohanrai09/blog/blob/main/static/images/config.png?raw=true)
 
 One of our changes included changing the MTU value to 1400 for a group, ALL, which is being applied on the all the interfaces!
 
