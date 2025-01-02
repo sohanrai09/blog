@@ -1,5 +1,5 @@
 ---
-title: "Mdt Iosxr"
+title: "MDT IOS-XR"
 date: 2025-01-02T19:17:52+05:30
 # bookComments: false
 # bookSearchExclude: false
@@ -214,9 +214,10 @@ Subscription:  Sub2
 
 RP/0/RP0/CPU0:PE1#
 </pre>
+
 Querying the InfluxDB
-<pre>
-<b>select "free_physical_memory","node_name" from "Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary"</b>
+```
+select "free_physical_memory","node_name" from "Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary"
 
 Interactive Table View (press q to exit mode, shift+up/down to navigate tables):
 Name: Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary
@@ -253,7 +254,7 @@ Name: Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary
 ┃                                       4 Columns, 5942 Rows, Page 1/229┃
 ┃                                               Table 1/1, Statement 1/1┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-</pre>
+```
 
 Equivalent query for Grafana in Flex Language Syntax
 ```
@@ -268,7 +269,7 @@ from(bucket: "mdtlab")
 Personally, I found the Flex Language syntax a bit tricky to write from scratch, thankfully, we can use `Query Builder` option in InfluxDB GUI to get the appropriate Flex Language query for your needs.
 
 Finally, it all comes together in Grafana dashboard.
-![Grafana](/images/grafana_1.png)
+![Grafana](https://github.com/sohanrai09/blog/blob/main/static/images/grafana_1.png?raw=true)
 
 ### Troubleshooting
 
