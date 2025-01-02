@@ -18,6 +18,11 @@ theme = "hugo-book"
     weight = 5
 
   [[menu.after]]
+    name = "Categories"
+    url = "https://sohanrai09.github.io/blog/categories"
+    weight = 6
+
+  [[menu.after]]
     name = "Github"
     url = "https://github.com/sohanrai09"
     weight = 10
