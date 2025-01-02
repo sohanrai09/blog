@@ -371,7 +371,7 @@ RP/0/RP0/CPU0:PE1#
 We can also check the TCP connection state.
 ```
 RP/0/RP0/CPU0:PE1#bash netstat -an
-Tue Dec 31 09:27:56.895 UTC
+Tue Dec 31 07:59:44.895 UTC
 Active Internet connections (servers and established)
 Proto Recv-Q Send-Q Local Address           Foreign Address         State      
 tcp        0      1 211.0.0.9:61390         192.168.100.1:57000     SYN_SENT   
