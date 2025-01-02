@@ -1,7 +1,7 @@
 ---
-date: '2025-01-02T18:02:41+05:30'
+date: 2022-04-03T18:28:20+05:30
 draft: false
-title: 'Robotframework 1'
+title: 'Robotframework-1'
 thumbnailImagePosition: left
 thumbnailImage: "https://images.pexels.com/photos/15286/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
 coverImage: "https://images.pexels.com/photos/15286/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
