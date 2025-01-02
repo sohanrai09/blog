@@ -1,5 +1,5 @@
 ---
-title: "Network Tui"
+title: "Network TUI"
 date: 2023-08-03T18:28:20+05:30
 # bookComments: false
 # bookSearchExclude: false
