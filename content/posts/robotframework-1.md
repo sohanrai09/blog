@@ -2,6 +2,9 @@
 date: '2025-01-02T18:02:41+05:30'
 draft: false
 title: 'Robotframework 1'
+thumbnailImagePosition: left
+thumbnailImage: "https://images.pexels.com/photos/15286/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+coverImage: "https://images.pexels.com/photos/15286/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
 ---
 In my new job role as a Test Engineer, knowing how to use Robot Framework for Automating Test Cases is crucial, to save time and to make testing more fun! As I'm going through this learning journey, I wanted to blog about it for anyone who is looking to start this journey and also to help me understand things in a better way.
 
@@ -159,9 +162,9 @@ PS C:\Users\User\PycharmProjects\Robotframework\Junos>
 
 Another great feature Robot Framework offers is, Test reports and logs are generated in *html* which makes reading it very easy using a web browser. Path to the Log and Report is printed out to the Console as you can see in the above output.
 
-Report for our Test Suite is shown below ![report](/static/images/rf_1_report-min.png)
+Report for our Test Suite is shown below ![report](https://raw.githubusercontent.com/sohanrai09/blog/refs/heads/main/images/rf_1_report-min.png)
 
-We can toggle to the Log file by clicking on **LOG** displayed on the top right corner, LOG file our Test Case is shown below ![log](/static/images/rf_1_log-min.png)
+We can toggle to the Log file by clicking on **LOG** displayed on the top right corner, LOG file our Test Case is shown below ![log](https://github.com/sohanrai09/blog/blob/main/images/rf_1_log-min.png?raw=true)
 
 And with that we have completed our first Testing using Robot Framework! Hopefully, you and I can now explore more and start Testing complex network related things.
 
