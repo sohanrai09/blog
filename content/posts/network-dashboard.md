@@ -3,6 +3,13 @@ title: "Network Dashboard"
 date: 2023-04-03T18:28:20+05:30
 # bookComments: false
 # bookSearchExclude: false
+categories:
+- rich
+- python
+#- subcategory
+tags:
+- rich
+- textual
 ---
 In this blog post I will be going through how I went about building a Network Dashboard using couple of my favorite Python libraries, Nornir and Rich. I'm quite sure that if you have been exploring the network automation world, you would have come across [Nornir](https://nornir.readthedocs.io/en/latest/) already. And similarly there is a very good chance that you have also come across [Rich](https://rich.readthedocs.io/en/stable/introduction.html), which is in my opinion one of the coolest libraries out there! If you are someone who loves working in CLI, like I do, you will absolutely love Rich!
 

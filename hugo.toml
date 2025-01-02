@@ -13,6 +13,10 @@ theme = "hugo-book"
 [menu]
 # [[menu.before]]
   [[menu.after]]
+    name = "Posts"
+    url = "https://sohanrai09.github.io/blog/posts"
+    weight = 10
+  [[menu.after]]
     name = "Github"
     url = "https://github.com/sohanrai09"
     weight = 10
@@ -25,7 +29,7 @@ theme = "hugo-book"
 [params]
   author = "Sohan Rai"
   description = "A blog about all things technical."
-  
+
 # (Optional) Set Google Analytics if you use it to track your website.
 # Always put it on the top of the configuration file, otherwise it won't work
 googleAnalytics = "UA-XXXXXXXXX-X"
@@ -56,7 +60,7 @@ disableKinds = ['taxonomy', 'taxonomyTerm']
 
   # (Optional, default none) Set the path to a logo for the book. If the logo is
   # /static/logo.png then the path would be 'logo.png'
-  BookLogo = '/static/images/cover_img.png'
+  #BookLogo = '/static/images/cover_img.png'
 
   # (Optional, default docs) Specify section of content to render as menu
   # You can also set value to "*" to render all sections to menu

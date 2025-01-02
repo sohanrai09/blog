@@ -3,6 +3,13 @@ title: "MDT IOS-XR"
 date: 2025-01-02T19:17:52+05:30
 # bookComments: false
 # bookSearchExclude: false
+categories:
+- iosxr
+- telemetry
+#- subcategory
+tags:
+- iosxr
+- telemetry
 ---
 I know I'm very late to the party and probably everbody has already moved to Telemetry, but during the Annual shutdown of Dec '24, I wanted to set this up in my personal lab and play around. I have been testing Model Driven Telemetry(MDT) on Cisco's IOS-XR for a while, so I wanted to share some of my learnings to help someone along their way for setting up telemetry. I will be primarily focusing on Cisco IOS-XR's implementation of MDT, more precisely GRPC DIAL-OUT for now.
 
@@ -132,7 +139,7 @@ Subscription:  Sub2
     Sensor Path:          Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization
     <b>Sensor Path State:    Resolved</b>
     Sensor Path:          Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary
-    Sensor Path State:    Resolved
+    <b>Sensor Path State:    Resolved</b>
 
   Destination Groups:
   Group Id: DGroup2
@@ -169,7 +176,7 @@ Subscription:  Sub2
       Sysdb Path:     /oper/wdsysmon_fd/gl/*
       Count:          5 Method: DATALIST Min: 201 ms Avg: 237 ms Max: 328 ms
       Item Count:     11 Status: Active
-      Missed Collections:0  send bytes: 3376266 packets: 15 dropped bytes: 0
+      <b>Missed Collections:0  send bytes: 3376266 packets: 15 dropped bytes: 0</b>
       Missed Heartbeats: 0  Filtered Item Count: 0
                       success         errors          deferred/drops  
       Gets            0               0               
@@ -201,7 +208,7 @@ Subscription:  Sub2
       Sysdb Path:     /oper/showd/node/*/show_mem
       Count:          5 Method: GET Min: 10 ms Avg: 23 ms Max: 45 ms
       Item Count:     11 Status: Active
-      Missed Collections:0  send bytes: 3310 packets: 5 dropped bytes: 0
+      <b>Missed Collections:0  send bytes: 3310 packets: 5 dropped bytes: 0</b>
       Missed Heartbeats: 0  Filtered Item Count: 0
                       success         errors          deferred/drops  
       Gets            11              0               

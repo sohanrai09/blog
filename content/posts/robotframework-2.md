@@ -3,6 +3,11 @@ title: "Robotframework 2"
 date: 2022-06-10T19:02:18+05:30
 # bookComments: false
 # bookSearchExclude: false
+categories:
+- robotframework
+#- subcategory
+tags:
+- robotframework
 ---
 It's been a while since my first [blog post](https://sohanrai09.github.io/new-blog/2022/04/robot-framework-1/) as I mentioned there, I'm at a new job (well it's been 2 months, so 'newish') and I've been busy getting to know the job(as with any job, there is a LOT to learn!).
 

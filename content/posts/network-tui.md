@@ -3,6 +3,13 @@ title: "Network Tui"
 date: 2023-08-03T18:28:20+05:30
 # bookComments: false
 # bookSearchExclude: false
+categories:
+- textual
+- python
+#- subcategory
+tags:
+- python
+- textual
 ---
 At the end of my previous [blog post](https://sohanrai09.github.io/new-blog/2023/04/network-dashboard/) I mentioned about wanting to work on [Textual](https://textual.textualize.io/), and I'm excited to share here my first project using Textual. I feel like for us network engineers, working on a CLI makes our work more enjoyable so naturally, building a TUI(Terminal User Interface) to do some of the automation tasks was a no-brainer to me. I have called it `Net-TUI`, a TUI application to do few network automation tasks.
 
