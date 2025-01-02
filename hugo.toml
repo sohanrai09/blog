@@ -4,7 +4,7 @@ title = "Sohan’s blog"
 theme = "hugo-book"
 
 [params]
-  author = "Sohan” Rai
+  author = "Sohan Rai"
   description = "A blog about all things technical."
 
   [[params.social]]
