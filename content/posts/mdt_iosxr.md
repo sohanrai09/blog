@@ -469,7 +469,7 @@ Tue Dec 31 08:56:16.248 UTC
 
 This was meerly scratching the surface but it was great fun setting everything up and to finally see those shinny graphs. Cisco has some very good documentation on this subject matter, please check them out if you're thinking of setting this up at home or at work.
 
-{{% hint [info] %}}
+{{% hint info %}}
 ### Reference
 
 https://xrdocs.io/telemetry/
