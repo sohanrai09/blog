@@ -23,6 +23,11 @@ theme = "hugo-book"
     weight = 6
 
   [[menu.after]]
+    name = "Linkedin"
+    url = "https://www.linkedin.com/in/sohan-rai-01a91488/"
+    weight = 10
+
+  [[menu.after]]
     name = "Github"
     url = "https://github.com/sohanrai09"
     weight = 10
