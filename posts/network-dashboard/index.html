@@ -1,0 +1,113 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="In this blog post I will be going through how I went about building a Network Dashboard using couple of my favorite Python libraries, Nornir and Rich. I&rsquo;m quite sure that if you have been exploring the network automation world, you would have come across Nornir already. And similarly there is a very good chance that you have also come across Rich, which is in my opinion one of the coolest libraries out there! If you are someone who loves working in CLI, like I do, you will absolutely love Rich!"><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#343a40"><meta name=color-scheme content="light dark"><meta property="og:url" content="https://sohanrai09.github.io/blog/posts/network-dashboard/"><meta property="og:site_name" content="Sohan’s blog"><meta property="og:title" content="Network Dashboard"><meta property="og:description" content="In this blog post I will be going through how I went about building a Network Dashboard using couple of my favorite Python libraries, Nornir and Rich. I’m quite sure that if you have been exploring the network automation world, you would have come across Nornir already. And similarly there is a very good chance that you have also come across Rich, which is in my opinion one of the coolest libraries out there! If you are someone who loves working in CLI, like I do, you will absolutely love Rich!"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-04-03T18:28:20+05:30"><meta property="article:modified_time" content="2023-04-03T18:28:20+05:30"><title>Network Dashboard | Sohan’s blog</title>
+<link rel=icon href=/blog/favicon.png><link rel=manifest href=/blog/manifest.json><link rel=canonical href=https://sohanrai09.github.io/blog/posts/network-dashboard/><link rel=stylesheet href=/blog/book.min.6c8b9d2a1fc95075ed7da46ca81060b39add8fff6741ac51259f768929281e2c.css integrity="sha256-bIudKh/JUHXtfaRsqBBgs5rdj/9nQaxRJZ92iSkoHiw=" crossorigin=anonymous><script defer src=/blog/fuse.min.js></script><script defer src=/blog/en.search.min.41d5af8efdd5f4906a5a8a7024c58f2b477050b22a67cb6a41da29d89b2a897d.js integrity="sha256-QdWvjv3V9JBqWopwJMWPK0dwULIqZ8tqQdop2JsqiX0=" crossorigin=anonymous></script></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a class="flex align-center" href=/blog/><span>Sohan’s blog</span></a></h2><div class="book-search hidden"><input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><script>document.querySelector(".book-search").classList.remove("hidden")</script></nav><script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script></div></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/blog/svg/menu.svg class=book-icon alt=Menu></label><h3>Network Dashboard</h3><label for=toc-control><img src=/blog/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><ul><li><a href=#hostsyaml>hosts.yaml</a></li><li><a href=#groupsyaml>groups.yaml</a></li><li><a href=#configyaml>config.yaml</a></li><li><a href=#end-goal>End Goal</a></li><li><a href=#pyez-rpc-in-nornir>PyEZ RPC in Nornir</a></li><li><a href=#building-dashboard-using-rich>Building Dashboard using Rich</a></li></ul></li></ul></nav></aside></header><article class="markdown book-post"><h2>Network Dashboard</h2><div class="flex align-center text-small book-post-date"><img src=/blog/svg/calendar.svg class=book-icon alt>
+<span>April 3, 2023</span></div><div class=book-post-content><p>In this blog post I will be going through how I went about building a Network Dashboard using couple of my favorite Python libraries, Nornir and Rich. I&rsquo;m quite sure that if you have been exploring the network automation world, you would have come across <a href=https://nornir.readthedocs.io/en/latest/>Nornir</a> already. And similarly there is a very good chance that you have also come across <a href=https://rich.readthedocs.io/en/stable/introduction.html>Rich</a>, which is in my opinion one of the coolest libraries out there! If you are someone who loves working in CLI, like I do, you will absolutely love Rich!</p><p>Nornir is a pure python framework which makes use of <a href=https://nornir.tech/nornir/plugins/>Plugins</a> to accomplish various tasks. As we go through this post you will see how these Plugins are super useful in getting things done and if you prefer to use a different plugin you can do so with minimal change. Like for instance, I will be using the Juniper PyEZ plugin to interact and fetch details from the routers, you can instead use Napalm, Netmiko, etc as per your convenience. The <code>Inventory</code> is the critical part of Nornir and it is mainly comprised of hosts, groups and config files in yaml format. For my script, I will be using a very basic version of Inventory, you can get really creative to make it very robust as per your needs.</p><pre tabindex=0><code>(venv) sohanr@sohanr-mbp dashboard % tree
+.
+├── config.yaml
+├── dashboard.py
+├── groups.yaml
+├── hosts.yaml
+├── nornir.log
+└── test.py
+
+1 directory, 6 files
+</code></pre><h3 id=hostsyaml>hosts.yaml
+<a class=anchor href=#hostsyaml>#</a></h3><p>In <code>hosts.yaml</code> file we define details of hosts we will be working with in our script.</p><pre tabindex=0><code>---
+vMX1:
+  hostname: vmx1.norn.lab
+  port: 31003
+  groups:
+    - nos
+vMX2:
+  hostname: vmx2.norn.lab
+  port: 31006
+  groups:
+    - nos
+vMX3:
+  hostname: vmx3.norn.lab
+  port: 31009
+  groups:
+    - nos
+</code></pre><h3 id=groupsyaml>groups.yaml
+<a class=anchor href=#groupsyaml>#</a></h3><p>In <code>groups.yaml</code> file we define any group specific attributes, this can include any login information, platform information, etc</p><pre tabindex=0><code>---
+devices:
+  username: username1
+  password: Password1
+nos:
+  platform: junos
+  groups:
+    - devices
+</code></pre><h3 id=configyaml>config.yaml
+<a class=anchor href=#configyaml>#</a></h3><p>Everything comes together in a <code>config.yaml</code> file, where you can define pointers to your hosts and group files.</p><pre tabindex=0><code>---
+inventory:
+    options:
+        host_file: &#34;hosts.yaml&#34;
+        group_file: &#34;groups.yaml&#34;
+runner:
+    options:
+        num_workers: 10
+</code></pre><h3 id=end-goal>End Goal
+<a class=anchor href=#end-goal>#</a></h3><p>Before we dive into the script, let&rsquo;s look at the end result so that we can then break things down to sections to tackle it one by one.</p><p><img src="https://github.com/sohanrai09/blog/blob/main/static/images/dashboard_1.png?raw=true" alt=dashboard_1>
+<img src="https://github.com/sohanrai09/blog/blob/main/static/images/dashboard_2.png?raw=true" alt=dashboard_2></p><p>There are two main sections to the script, one is retrieving the necessary data from the routers and two, building the dashboard itself. As mentioned in the beginning of this post, I will be using Junos PyEZ to fetch the network data. PyEZ offers RPCs to fetch network information in structured format which then makes it easy for us to navigate through the data to get the required information. Let&rsquo;s take a look at one example where we try to fetch the BGP information from the network.</p><h3 id=pyez-rpc-in-nornir>PyEZ RPC in Nornir
+<a class=anchor href=#pyez-rpc-in-nornir>#</a></h3><p>In this example, we will be using a <code>task</code> named <code>pyez_rpc</code> in the PyEZ plugin for RPC. For more information on the plugin, please refer to the documentation <a href=https://nornir-pyez.readthedocs.io/en/latest/>here</a>.</p><pre tabindex=0><code>(venv) sohanr@sohanr-mbp dashboard % python
+Python 3.9.6 (default, Sep 26 2022, 11:37:49) 
+[Clang 14.0.0 (clang-1400.0.29.202)] on darwin
+Type &#34;help&#34;, &#34;copyright&#34;, &#34;credits&#34; or &#34;license&#34; for more information.
+&gt;&gt;&gt; from nornir import InitNornir
+&gt;&gt;&gt; from nornir_pyez.plugins.tasks import pyez_rpc
+&gt;&gt;&gt; nr = InitNornir()
+&gt;&gt;&gt; output = nr.run(task=pyez_rpc, func=&#39;get-bgp-summary-information&#39;)
+&gt;&gt;&gt; output
+AggregatedResult (pyez_rpc): {&#39;vMX1&#39;: MultiResult: [Result: &#34;pyez_rpc&#34;], &#39;vMX2&#39;: MultiResult: [Result: &#34;pyez_rpc&#34;], &#39;vMX3&#39;: MultiResult: [Result: &#34;pyez_rpc&#34;]}
+&gt;&gt;&gt; 
+</code></pre><p>Nornir returns the result as an <a href=https://nornir.readthedocs.io/en/latest/tutorial/task_results.html>Aggregated Result</a> object, which is a dict-like object we can iterate over to get the required information. Let&rsquo;s say I want to look into one of the host&rsquo;s data, I can do that as shown below.</p><pre tabindex=0><code>&gt;&gt;&gt; output
+AggregatedResult (pyez_rpc): {&#39;vMX1&#39;: MultiResult: [Result: &#34;pyez_rpc&#34;], &#39;vMX2&#39;: MultiResult: [Result: &#34;pyez_rpc&#34;], &#39;vMX3&#39;: MultiResult: [Result: &#34;pyez_rpc&#34;]}
+&gt;&gt;&gt; bgp_data = output[&#39;vMX1&#39;][0].result
+&gt;&gt;&gt; bgp_data
+{&#39;bgp-information&#39;: {&#39;bgp-thread-mode&#39;: &#39;BGP I/O&#39;, &#39;thread-state&#39;: None, &#39;default-ebgp-advertise-mode&#39;: &#39;accept&#39;, &#39;default-ebgp-receive-mode&#39;: &#39;accept&#39;, &#39;group-count&#39;: &#39;1&#39;, &#39;peer-count&#39;: &#39;2&#39;, &#39;down-peer-count&#39;: &#39;0&#39;, &#39;bgp-rib&#39;: {&#39;@style&#39;: &#39;brief&#39;, &#39;name&#39;: &#39;inet.0&#39;, &#39;total-prefix-count&#39;: &#39;0&#39;, &#39;received-prefix-count&#39;: &#39;0&#39;, &#39;accepted-prefix-count&#39;: &#39;0&#39;, &#39;active-prefix-count&#39;: &#39;0&#39;, &#39;suppressed-prefix-count&#39;: &#39;0&#39;, &#39;history-prefix-count&#39;: &#39;0&#39;, &#39;damped-prefix-count&#39;: &#39;0&#39;, &#39;total-external-prefix-count&#39;: &#39;0&#39;, &#39;active-external-prefix-count&#39;: &#39;0&#39;, &#39;accepted-external-prefix-count&#39;: &#39;0&#39;, &#39;suppressed-external-prefix-count&#39;: &#39;0&#39;, &#39;total-internal-prefix-count&#39;: &#39;0&#39;, &#39;active-internal-prefix-count&#39;: &#39;0&#39;, &#39;accepted-internal-prefix-count&#39;: &#39;0&#39;, &#39;suppressed-internal-prefix-count&#39;: &#39;0&#39;, &#39;pending-prefix-count&#39;: &#39;0&#39;, &#39;bgp-rib-state&#39;: &#39;BGP restart is complete&#39;}, &#39;bgp-peer&#39;: [{&#39;@style&#39;: &#39;terse&#39;, &#39;@heading&#39;: &#39;Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...&#39;, &#39;peer-address&#39;: &#39;10.100.100.2&#39;, &#39;peer-as&#39;: &#39;64522&#39;, &#39;input-messages&#39;: &#39;149&#39;, &#39;output-messages&#39;: &#39;149&#39;, &#39;route-queue-count&#39;: &#39;0&#39;, &#39;flap-count&#39;: &#39;0&#39;, &#39;elapsed-time&#39;: {&#39;@seconds&#39;: &#39;4024&#39;, &#39;#text&#39;: &#39;1:07:04&#39;}, &#39;peer-state&#39;: {&#39;@format&#39;: &#39;Establ&#39;, &#39;#text&#39;: &#39;Established&#39;}, &#39;bgp-rib&#39;: {&#39;@style&#39;: &#39;terse&#39;, &#39;name&#39;: &#39;inet.0&#39;, &#39;active-prefix-count&#39;: &#39;0&#39;, &#39;received-prefix-count&#39;: &#39;0&#39;, &#39;accepted-prefix-count&#39;: &#39;0&#39;, &#39;suppressed-prefix-count&#39;: &#39;0&#39;}}, {&#39;@style&#39;: &#39;terse&#39;, &#39;peer-address&#39;: &#39;10.100.100.3&#39;, &#39;peer-as&#39;: &#39;64522&#39;, &#39;input-messages&#39;: &#39;150&#39;, &#39;output-messages&#39;: &#39;150&#39;, &#39;route-queue-count&#39;: &#39;0&#39;, &#39;flap-count&#39;: &#39;0&#39;, &#39;elapsed-time&#39;: {&#39;@seconds&#39;: &#39;4024&#39;, &#39;#text&#39;: &#39;1:07:04&#39;}, &#39;peer-state&#39;: {&#39;@format&#39;: &#39;Establ&#39;, &#39;#text&#39;: &#39;Established&#39;}, &#39;bgp-rib&#39;: {&#39;@style&#39;: &#39;terse&#39;, &#39;name&#39;: &#39;inet.0&#39;, &#39;active-prefix-count&#39;: &#39;0&#39;, &#39;received-prefix-count&#39;: &#39;0&#39;, &#39;accepted-prefix-count&#39;: &#39;0&#39;, &#39;suppressed-prefix-count&#39;: &#39;0&#39;}}]}}
+&gt;&gt;&gt; 
+</code></pre><p>As you can see, we see a structured data being returned from the device and now we can navigate through it like we do with any dict-like object in python to get the desired information.</p><pre tabindex=0><code>&gt;&gt;&gt; total_peers = bgp_data[&#39;bgp-information&#39;][&#39;peer-count&#39;]
+&gt;&gt;&gt; down_peers = bgp_data[&#39;bgp-information&#39;][&#39;down-peer-count&#39;]
+&gt;&gt;&gt; 
+&gt;&gt;&gt; total_peers
+&#39;2&#39;
+&gt;&gt;&gt; 
+&gt;&gt;&gt; down_peers
+&#39;0&#39;
+&gt;&gt;&gt; 
+</code></pre><p>Hopefully with this as a reference, you should be able to work your way through rest of the data retrieval code.</p><h3 id=building-dashboard-using-rich>Building Dashboard using Rich
+<a class=anchor href=#building-dashboard-using-rich>#</a></h3><p>The easiest part in the dashboard is the <code>Progress Bars</code> we see at the top.</p><p><img src="https://github.com/sohanrai09/blog/blob/main/static/images/prog_bars.png?raw=true" alt=prog_bars></p><p>I&rsquo;m using another Nornir Plugin to do this, called <a href=https://github.com/InfrastructureAsCode-ch/nornir_rich>Nornir_Rich</a>. It&rsquo;s very simple and straight forward to use but the results are really amazing! It is quite literally the best of two worlds, Rich and Nornir!</p><p>Next, I&rsquo;m using <a href=https://rich.readthedocs.io/en/stable/tables.html>Tables</a> to display the information gathered from the device. Let&rsquo;s take an example of <code>System Information</code> table.
+<img src="https://github.com/sohanrai09/blog/blob/main/static/images/sys_info_table.png?raw=true" alt=sys_info></p><pre tabindex=0><code>sys_info_table = Table(show_lines=True, show_header=False, box=box.ASCII, title=&#39;System Information&#39;)
+sys_info_table.add_column(&#34;Field&#34;, justify=&#34;right&#34;, style=&#34;magenta&#34;, width=18)
+sys_info_table.add_column(&#34;Details&#34;, style=&#34;cyan&#34;, width=50)
+sys_info_table.add_row(&#39;SW version&#39;, version)
+sys_info_table.add_row(&#39;Model&#39;, model)
+sys_info_table.add_row(&#39;Serial Number&#39;, serial_num)
+sys_info_table.add_row(&#39;RE0 uptime&#39;, re0_uptime)
+sys_info_table.add_row(&#39;RE0 last reboot reason&#39;, re0_last_reboot_reason)
+sys_info_table.add_row(&#39;RE1 uptime&#39;, re1_uptime)
+sys_info_table.add_row(&#39;RE1 last reload reason&#39;, re1_last_reboot_reason)
+</code></pre><p>Variables like <code>version</code>, <code>model</code>, etc are obtained by navigating through the <code>AggregatedResult</code> object, as explained earlier.</p><p>In the dashboard, <code>Memory & CPU Information</code> information is depicted in a rather interesting format. Underneath, it is still a <code>Table</code> but I&rsquo;m using <code>Emojis</code> to represent the values, this is how the code looks like.
+<img src="https://github.com/sohanrai09/blog/blob/main/static/images/mem_table.png?raw=true" alt=mem_table></p><pre tabindex=0><code>mem_cpu_table = Table(show_header=False, box=box.ASCII, width=50, title=&#39;Memory &amp; CPU Information&#39;)
+mem_cpu_table.add_column(&#34;Field&#34;, justify=&#34;left&#34;, style=&#34;magenta&#34;)
+if used_mem &gt; 20: # To reduce the number of emojis/diamonds displayed
+    mem_cpu_table.add_row(&#34;:large_blue_diamond:&#34; * (int(int(used_mem)/5)) + f&#34; {used_mem}%&#34; + &#34;\n\n&#34;, style=&#39;cyan&#39;)
+else:
+    mem_cpu_table.add_row(&#34;:large_blue_diamond:&#34; * int(used_mem) + f&#34; {used_mem}%&#34; + &#34;\n\n&#34;,
+                            style=&#39;cyan&#39;)
+if int(cpu_usage) &gt; 20:
+    mem_cpu_table.add_row(&#34;:large_orange_diamond:&#34; * (int(int(cpu_usage)/2)) + f&#34; {cpu_usage}%&#34; + &#34;\n\n\n&#34;,
+                            style=&#39;magenta&#39;)
+else:
+    mem_cpu_table.add_row(&#34;:large_orange_diamond:&#34; * int(int(cpu_usage)) + f&#34; {cpu_usage}%&#34; + &#34;\n\n\n&#34;, style=&#39;magenta&#39;)
+mem_cpu_table.add_row(&#34;:large_blue_diamond:  memory in-use\t:large_orange_diamond:  cpu in-use&#34;)
+</code></pre><p>Once I have the 3 tables in place, I put them together in one single table. Note that <code>Memory & CPU Information</code> & <code>Commit Information</code> were merged together to form a single <code>mem_cpu_commit_table</code> table
+<img src="https://github.com/sohanrai09/blog/blob/main/static/images/first_row_table.png?raw=true" alt=first_row_table></p><pre tabindex=0><code># Everything comes together, all the tables are put into one main table, which is then rendered in a Panel
+main_table = Table(show_lines=True, show_header=False)
+main_table.add_column(justify=&#34;right&#34;, style=&#34;magenta&#34;)
+main_table.add_column(justify=&#34;right&#34;, style=&#34;green&#34;)
+main_table.add_column(justify=&#34;right&#34;, style=&#34;magenta&#34;)
+main_table.add_row(sys_info_table, protocols_table, mem_cpu_commit_table)
+</code></pre><p>Next, we make use of <a href=https://rich.readthedocs.io/en/stable/panel.html>Panels</a> to place our final table. We repeat the same procedure for all the hosts in our inventory and keep appending the panels of each host into a list named <code>panel_list</code>.</p><pre tabindex=0><code>panel = Panel(main_table, width=200,title=router, box=box.DOUBLE)
+panel_list.append(panel)
+</code></pre><p>Finally, we iterate over the <code>panel_list</code> and print the panels into the console using <code>console.print</code>. I would also like to highlight another element in the dashboard that appears when the script is building the dashboard (unfortunately the snapshot of the dashboard doesn&rsquo;t show it) i.e., <a href="https://rich.readthedocs.io/en/stable/reference/spinner.html?highlight=spinner">Spinner</a>. Spinners are nice when you want to display an animation when the script is executing a piece of code and awaiting completion.</p><p>I know that I skimmed over a lot of details but hopefully by going through one example of each of the elements used in the script, I&rsquo;ve given a basic idea of the logic and technique used to construct the dashboard. Please refer to the full code <a href=https://github.com/sohanrai09/My_Nornir/tree/main/dashboard>here</a> and if you have not used Rich yet, hopefully this is a starter for you to go on and explore more! While I&rsquo;ve been working on this, folks from Rich have released another mind blowing library called <a href=https://textual.textualize.io/>Textual</a> which takes working in the terminal to a whole another level! May be soon I will give that a go and post it here, until then goodbye!</p></div></article><footer class=book-footer><div class="flex flex-wrap justify-between"></div><script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script></footer><div class=book-comments></div><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><div class=book-toc-content><nav id=TableOfContents><ul><li><ul><li><a href=#hostsyaml>hosts.yaml</a></li><li><a href=#groupsyaml>groups.yaml</a></li><li><a href=#configyaml>config.yaml</a></li><li><a href=#end-goal>End Goal</a></li><li><a href=#pyez-rpc-in-nornir>PyEZ RPC in Nornir</a></li><li><a href=#building-dashboard-using-rich>Building Dashboard using Rich</a></li></ul></li></ul></nav></div></aside></main></body></html>
