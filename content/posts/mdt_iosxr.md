@@ -11,13 +11,13 @@ tags:
 - iosxr
 - telemetry
 ---
-I know I'm very late to the party and probably everybody has already moved on to Telemetry. But during the Annual Shutdown of Dec '24, I had some spare time, so I wanted to set this up in my personal lab and play around. At work, I have been testing Model Driven Telemetry(MDT) on Cisco's IOS-XR for a while now, so I wanted to share some of my learnings through this post. I will be primarily focusing on Cisco IOS-XR's implementation of MDT, more precisely GRPC DIAL-OUT in this post.
+I know I'm very late to the party probably everybody has already moved on to Telemetry. But during the Annual Shutdown of Dec '24, I had some spare time, so I wanted to set this up in my personal lab and play around. At work, I have been testing Model Driven Telemetry(MDT) on Cisco's IOS-XR for a while now, so I wanted to share some of my learnings through this post. I will be primarily focusing on Cisco IOS-XR's implementation of MDT, more precisely GRPC DIAL-OUT in this post.
 
 {{% hint info %}}
 I'm using Cisco IOS-XRv 9000 running 7.9.1 for this exercise.
 {{% /hint %}}
 
-There are already tons of content on setting up the `TIG(Telegraf, InfluxDB, Grafana)` stack, I just wanted to mention here the Telegraf configuration for a quick reference.
+There are already tons of content on setting up the `TIG(Telegraf, InfluxDB, Grafana)` stack, I just want to mention here the Telegraf configuration for a quick reference.
 
 ```
 # telegraf.conf
@@ -470,7 +470,7 @@ Tue Dec 31 08:56:16.248 UTC
 },
 ^CDone
 ```
-This can also help in verifying if the sensor-path you're trying is valid or not. Using an invalid path will show up as `Not Resolved` while checking the subscription state.
+This can also help in verifying if the sensor-path you're trying is valid or not. Using an invalid path will show up as `Not Resolved` while checking the sensor-path state.
 
 <pre>
 RP/0/RP0/CPU0:PE1#show telemetry model-driven subscription INVALID_SUB 
