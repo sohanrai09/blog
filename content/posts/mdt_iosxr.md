@@ -379,7 +379,7 @@ nection error: desc = "transport: error while dialing: dial tcp 192.168.100.1:57
 RP/0/RP0/CPU0:PE1#
 ```
 
-We can also check the TCP connection state on the node. Here the TCP connection is not moving past `SYN_SENT`, as it is has not received `SYN+ACK` from the Server, eventually it times out.
+We can also check the TCP connection state on the node. Here the TCP connection is not moving past `SYN_SENT`, as it has not received `SYN+ACK` from the Server, eventually it times out.
 ```
 RP/0/RP0/CPU0:PE1#bash netstat -an
 Tue Dec 31 07:59:44.895 UTC
@@ -395,7 +395,7 @@ unix  2      [ ]         DGRAM                    14646222
 RP/0/RP0/CPU0:PE1#
 ```
 
-In this particular case, server didn't have a route to Router's Loopback, as soon I added the route, Connections came up.
+In this particular case, Server didn't have a route to Router's Loopback `211.0.0.9`, due to which it is unable to respond to Router's `TCP SYN`, as soon I added the route, Connections came up.
 
 ```
 RP/0/RP0/CPU0:PE1#show grpc trace all reverse 
@@ -432,9 +432,9 @@ unix  2      [ ]         DGRAM                    13474834
 RP/0/RP0/CPU0:PE1#
 ```
 
-### Validating YANG Data model using in-built Python script
+### Validating YANG Data model using built-in Python script
 
-IOS-XR comes with a handy in-built python script, `mdt_exec.py` which can be invoked to quickly check the YANG model for any particular path.
+IOS-XR comes with a handy built-in python script, `mdt_exec.py` which can be invoked to quickly check the YANG model for any particular path. 
 
 ```
 RP/0/RP0/CPU0:PE1#run mdt_exec.py -s Cisco-IOS-XR-clns-isis-oper:isis/instance$
@@ -470,6 +470,43 @@ Tue Dec 31 08:56:16.248 UTC
 },
 ^CDone
 ```
+This can also help in verifying if the sensor-path you're trying is valid or not. Using an invalid path will show up as `Not Resolved` while checking the subscription state.
+
+<pre>
+RP/0/RP0/CPU0:PE1#show telemetry model-driven subscription INVALID_SUB 
+Fri Jan  3 04:09:42.372 UTC
+Subscription:  INVALID_SUB
+-------------
+  State:       NA
+  Sensor groups:
+  Id: INVALID_PATH
+    Sample Interval:      90000 ms
+    Heartbeat Interval:   NA
+    Sensor Path:          Cisco-IOS-XR-dnx-driver-fabric-plane-oper:fabric/plane-table/plane
+    <b>Sensor Path State:    Not Resolved</b>
+
+  Destination Groups:
+  Group Id: DGroup2
+    Destination IP:       192.168.100.1
+    Destination Port:     57000
+    Encoding:             self-describing-gpb
+    Transport:            grpc
+    State:                NA
+    TLS :                 False
+
+  Collection Groups:
+  ------------------
+  No active collection groups
+
+RP/0/RP0/CPU0:PE1#
+RP/0/RP0/CPU0:PE1#run mdt_exec.py -s Cisco-IOS-XR-dnx-driver-fabric-plane-oper$
+Fri Jan  3 04:10:06.983 UTC
+<b>{"Sub_id" : "200000001", "error" : "Module 'Cisco-IOS-XR-dnx-driver-fabric-plane-oper' not recognized or supported for the specified operation"}</b>
+{"Sub_id" : "200000001", "error" : "Module 'Cisco-IOS-XR-dnx-driver-fabric-plane-oper' not recognized or supported for the specified operation"}
+^CDone
+
+RP/0/RP0/CPU0:PE1#
+</pre>
 
 This was meerly scratching the surface but it was great fun setting everything up and to finally see those shinny graphs. Cisco has some very good documentation on this subject matter, please check them out if you're thinking of setting this up at home or at work.
 
