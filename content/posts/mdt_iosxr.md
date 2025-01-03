@@ -379,7 +379,7 @@ nection error: desc = "transport: error while dialing: dial tcp 192.168.100.1:57
 RP/0/RP0/CPU0:PE1#
 ```
 
-We can also check the TCP connection state.
+We can also check the TCP connection state on the node. Here the TCP connection is not moving past `SYN_SENT`, as it is has not received `SYN+ACK` from the Server, eventually it times out.
 ```
 RP/0/RP0/CPU0:PE1#bash netstat -an
 Tue Dec 31 07:59:44.895 UTC
