@@ -11,13 +11,13 @@ tags:
 - iosxr
 - telemetry
 ---
-I know I'm very late to the party and probably everybody has already moved on to Telemetry. But during the Annual shutdown of Dec '24, I had some spare time, so I wanted to set this up in my personal lab and play around. At work, I have been testing Model Driven Telemetry(MDT) on Cisco's IOS-XR for a while now, so I wanted to share some of my learnings through this post. I will be primarily focusing on Cisco IOS-XR's implementation of MDT, more precisely GRPC DIAL-OUT in this post.
+I know I'm very late to the party and probably everybody has already moved on to Telemetry. But during the Annual Shutdown of Dec '24, I had some spare time, so I wanted to set this up in my personal lab and play around. At work, I have been testing Model Driven Telemetry(MDT) on Cisco's IOS-XR for a while now, so I wanted to share some of my learnings through this post. I will be primarily focusing on Cisco IOS-XR's implementation of MDT, more precisely GRPC DIAL-OUT in this post.
 
 {{% hint info %}}
 I'm using Cisco IOS-XRv 9000 running 7.9.1 for this exercise.
 {{% /hint %}}
 
-There are already tons of content on setting up the TIG(Telegraf, InfluxDB, Grafana) stack, I just wanted to mention here the Telegraf configuration for a quick reference.
+There are already tons of content on setting up the `TIG(Telegraf, InfluxDB, Grafana)` stack, I just wanted to mention here the Telegraf configuration for a quick reference.
 
 ```
 # telegraf.conf
@@ -395,7 +395,7 @@ unix  2      [ ]         DGRAM                    14646222
 RP/0/RP0/CPU0:PE1#
 ```
 
-In this particular case, Server didn't have a route to Router's Loopback `211.0.0.9`, due to which it is unable to respond to Router's `TCP SYN`, as soon I added the route, Connections came up.
+In this particular case, Server doesn't have a route to Router's Loopback `211.0.0.9`, due to which it is unable to respond to Router's `TCP SYN`, as soon I added the route, Connections started coming up.
 
 ```
 RP/0/RP0/CPU0:PE1#show grpc trace all reverse 
@@ -508,7 +508,7 @@ Fri Jan  3 04:10:06.983 UTC
 RP/0/RP0/CPU0:PE1#
 </pre>
 
-This was meerly scratching the surface but it was great fun setting everything up and to finally see those shinny graphs. Cisco has some very good documentation on this subject matter, please check them out if you're thinking of setting this up at home or at work.
+This was just scratching the surface when it comes to possibilities with Telemetry but it was great fun setting everything up and to finally see those shinny graphs. Cisco has some very good documentation on this subject matter, please check them out if you're thinking of setting this up at home or at work.
 
 {{% hint info %}}
 ### Reference
