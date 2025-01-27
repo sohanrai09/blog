@@ -9,7 +9,7 @@ categories:
 tags:
 - robotframework
 ---
-In this blog post I'll be going through a Test Scenario which involves multiple Test Cases with some interesting checks. I will be covering only the new things I've added for this Test Scenario when compared to my earlier posts, which can be found [here](https://sohanrai09.github.io/new-blog/). Test Suite begins by validating the network status on a particular device, this involves checking protocols such as OSPF, BGP, Interface Status etc. After ensuring network is in steady state, a configuration change is executed and after the change, network is validated again to ensure there has been no network impact.
+In this blog post I'll be going through a Test Scenario which involves multiple Test Cases with some interesting checks. I will be covering only the new things I've added for this Test Scenario when compared to my earlier posts, which can be found [here](https://sohanrai09.github.io/blog/posts/). Test Suite begins by validating the network status on a particular device, this involves checking protocols such as OSPF, BGP, Interface Status etc. After ensuring network is in steady state, a configuration change is executed and after the change, network is validated again to ensure there has been no network impact.
 
 ### Variables
 

@@ -11,7 +11,7 @@ tags:
 - python
 - textual
 ---
-At the end of my previous [blog post](https://sohanrai09.github.io/new-blog/2023/04/network-dashboard/) I mentioned about wanting to work on [Textual](https://textual.textualize.io/), and I'm excited to share here my first project using Textual. I feel like for us network engineers, working on a CLI makes our work more enjoyable so naturally, building a TUI(Terminal User Interface) to do some of the automation tasks was a no-brainer to me. I have called it `Net-TUI`, a TUI application to do few network automation tasks.
+At the end of my previous [blog post](https://sohanrai09.github.io/blog/posts/network-dashboard/) I mentioned about wanting to work on [Textual](https://textual.textualize.io/), and I'm excited to share here my first project using Textual. I feel like for us network engineers, working on a CLI makes our work more enjoyable so naturally, building a TUI(Terminal User Interface) to do some of the automation tasks was a no-brainer to me. I have called it `Net-TUI`, a TUI application to do few network automation tasks.
 
 ### Net-TUI
 
@@ -19,7 +19,7 @@ As mentioned earlier, I'm using `Textual` to build the TUI App and to help me wi
 
 ### Dashboard
 
-To anyone following my blog, you would know that I went over building a Networking Dashboard in the previous [blog post](https://sohanrai09.github.io/new-blog/2023/04/network-dashboard/). I'm using it as a reference here with some enhancements and user interactions to make it more 'App like'. Below is the snippet of how it looks like when the App is launched. As you can see, user has an option to provide the `device name` of which they want to build the Dashboard off. `device name` input comes with a nice little `dropdown` and `autocomplete` feature, which in this case is the list of available devices from the Nornir Inventory, which gets 'autocompleted' as we type along.
+To anyone following my blog, you would know that I went over building a Networking Dashboard in the previous [blog post](https://sohanrai09.github.io/blog/posts/network-dashboard/). I'm using it as a reference here with some enhancements and user interactions to make it more 'App like'. Below is the snippet of how it looks like when the App is launched. As you can see, user has an option to provide the `device name` of which they want to build the Dashboard off. `device name` input comes with a nice little `dropdown` and `autocomplete` feature, which in this case is the list of available devices from the Nornir Inventory, which gets 'autocompleted' as we type along.
 
 ![tui_dash1](https://github.com/sohanrai09/blog/blob/main/static/images/tui_dash1.png?raw=true)
 
